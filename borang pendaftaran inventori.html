@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Borang Pendaftaran Inventori</title>
+  <style>
+    /* Ringkas, moden & responsif */
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --accent:#0b63d6; --muted:#6b7280;
+      --success:#10b981; --danger:#ef4444;
+      --radius:10px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{background:var(--bg); margin:0; padding:24px; color:#111827;}
+    .container{max-width:980px; margin:0 auto;}
+    .card{background:var(--card); border-radius:var(--radius); padding:22px; box-shadow:0 6px 18px rgba(12,20,42,0.06);}
+    h1{margin:0 0 8px; font-size:20px;}
+    p.lead{margin:0 0 18px; color:var(--muted); font-size:14px;}
+    .grid{display:grid; gap:12px; grid-template-columns:repeat(2,1fr);}
+    @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+    label{display:block; font-size:13px; margin-bottom:6px; color:#0f1724;}
+    input[type="text"], input[type="number"], input[type="date"], input[type="file"],
+    select, textarea{width:100%; padding:10px 12px; border:1px solid #e6e9ef; border-radius:8px; font-size:14px; box-sizing:border-box;}
+    textarea{min-height:90px; resize:vertical;}
+    .row{display:flex; gap:12px;}
+    .row > *{flex:1;}
+    .btn{background:var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:600;}
+    .btn.secondary{background:#eef2ff; color:var(--accent); border:1px solid rgba(11,99,214,0.12);}
+    .small{font-size:13px; color:var(--muted);}
+    .field-note{font-size:12px; color:var(--muted); margin-top:6px;}
+    .preview{border:1px dashed #e6e9ef; border-radius:8px; padding:8px; text-align:center; background:#fafbff;}
+    .img-preview{max-width:160px; max-height:120px; object-fit:cover; border-radius:6px; display:block; margin:8px auto;}
+    .foot{display:flex; justify-content:space-between; align-items:center; margin-top:16px;}
+    .error{color:var(--danger); font-size:13px;}
+    .success{color:var(--success); font-size:13px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="region" aria-label="Borang Pendaftaran Inventori">
+      <h1>Borang Pendaftaran Inventori</h1>
+      <p class="lead">Sila isi maklumat inventori dengan lengkap. Medan bertanda * wajib diisi.</p>
+
+      <form id="inventoryForm" autocomplete="off" novalidate>
+        <div class="grid">
+          <div>
+            <label for="itemName">Nama Aset / Barang <span class="small">*</span></label>
+            <input id="itemName" name="itemName" type="text" required placeholder="Contoh: Laptop Dell Inspiron" />
+          </div>
+
+          <div>
+            <label for="category">Kategori <span class="small">*</span></label>
+            <select id="category" name="category" required>
+              <option value="">– Pilih Kategori –</option>
+              <option>Komputer & IT</option>
+              <option>Perabot</option>
+              <option>Alat Muzik</option>
+              <option>Peralatan Suara & Cahaya</option>
+              <option>Alat Tulis</option>
+              <option>Lain-lain</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="serial">No. Siri / ID Aset</label>
+            <input id="serial" name="serial" type="text" placeholder="Contoh: SN12345678" />
+          </div>
+
+          <div>
+            <label for="model">Model / Jenama</label>
+            <input id="model" name="model" type="text" placeholder="Contoh: Dell Inspiron 15" />
+          </div>
+
+          <div>
+            <label for="supplier">Pembekal</label>
+            <input id="supplier" name="supplier" type="text" placeholder="Nama Syarikat pembekal" />
+          </div>
+
+          <div>
+            <label for="purchaseDate">Tarikh Perolehan</label>
+            <input id="purchaseDate" name="purchaseDate" type="date" />
+          </div>
+
+          <div>
+            <label for="warranty">Tempoh Waranti (bulan)</label>
+            <input id="warranty" name="warranty" type="number" min="0" step="1" placeholder="Contoh: 12" />
+          </div>
+
+          <div>
+            <label for="location">Lokasi / Unit</label>
+            <input id="location" name="location" type="text" placeholder="Contoh: Stor IT / Bilik Pementasan" />
+          </div>
+
+          <div>
+            <label for="quantity">Kuantiti <span class="small">*</span></label>
+            <input id="quantity" name="quantity" type="number" min="1" value="1" required />
+          </div>
+
+          <div>
+            <label for="unitPrice">Harga Seunit (RM)</label>
+            <input id="unitPrice" name="unitPrice" type="number" min="0" step="0.01" placeholder="Contoh: 2500.00" />
+          </div>
+
+          <div>
+            <label for="totalCost">Jumlah (RM)</label>
+            <input id="totalCost" name="totalCost" type="text" readonly placeholder="Auto kira" />
+            <div class="field-note">Jumlah dikira automatik: Kuantiti × Harga Seunit</div>
+          </div>
+
+          <div>
+            <label for="condition">Kondisi</label>
+            <select id="condition" name="condition">
+              <option value="">– Pilih –</option>
+              <option>Baru</option>
+              <option>Baik / Terpakai</option>
+              <option>Perlu Baikpulih</option>
+              <option>Rosak</option>
+            </select>
+          </div>
+
+          <div style="grid-column: 1 / -1;">
+            <label for="remarks">Catatan / Keterangan</label>
+            <textarea id="remarks" name="remarks" placeholder="Sejarah servis, nota lokasi, nombor rujukan, dsb."></textarea>
+          </div>
+
+          <div>
+            <label for="photo">Muat Naik Gambar / Bukti (jpg/png) <span class="small">*</span></label>
+            <input id="photo" name="photo" type="file" accept="image/png, image/jpeg" required />
+            <div class="field-note">Sokong imej sehingga 5MB. Gambar akan dipratonton sebelum dihantar.</div>
+          </div>
+
+          <div class="preview" id="photoPreviewArea">
+            <strong class="small">Pratonton Gambar</strong>
+            <img id="imgPreview" class="img-preview" alt="Pratonton imej" style="display:none;" />
+            <div id="noImage" class="small">Tiada gambar dipilih.</div>
+          </div>
+        </div>
+
+        <div class="foot">
+          <div>
+            <button type="button" class="btn secondary" id="resetBtn">Reset</button>
+            <button type="submit" class="btn" id="submitBtn">Hantar</button>
+          </div>
+          <div id="formMsg" aria-live="polite" class="small"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+/* Fungsi asas: validasi, kira total & pratonton imej
+   Nota: kod ini hantar data sebagai FormData ke endpoint server (fetch).
+   Jika anda mahu integrasi terus ke Google Form, perlu tweak (Google Form tak support file upload dari luar).
+*/
+
+document.addEventListener('DOMContentLoaded', function(){
+  const form = document.getElementById('inventoryForm');
+  const qty = document.getElementById('quantity');
+  const unit = document.getElementById('unitPrice');
+  const total = document.getElementById('totalCost');
+  const photo = document.getElementById('photo');
+  const imgPreview = document.getElementById('imgPreview');
+  const noImage = document.getElementById('noImage');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const msg = document.getElementById('formMsg');
+
+  function calcTotal(){
+    const q = parseFloat(qty.value) || 0;
+    const u = parseFloat(unit.value) || 0;
+    const t = (q * u).toFixed(2);
+    total.value = t;
+  }
+
+  qty.addEventListener('input', calcTotal);
+  unit.addEventListener('input', calcTotal);
+
+  photo.addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(!file){ imgPreview.style.display='none'; noImage.style.display='block'; return; }
+    if(file.size > 5 * 1024 * 1024){
+      alert('Gambar melebihi 5MB. Sila pilih fail yang lebih kecil.'); photo.value=''; return;
+    }
+    const url = URL.createObjectURL(file);
+    imgPreview.src = url;
+    imgPreview.style.display = 'block';
+    noImage.style.display = 'none';
+  });
+
+  resetBtn.addEventListener('click', function(){
+    form.reset();
+    imgPreview.style.display='none';
+    noImage.style.display='block';
+    total.value='';
+    msg.textContent='';
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    msg.textContent='';
+    // Basic client-side validation
+    if(!form.checkValidity()){
+      msg.innerHTML = '<span class="error">Sila lengkapkan medan wajib sebelum hantar.</span>';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Menghantar...';
+
+    // Kumpul data
+    const fd = new FormData(form);
+    // (Optional) append meta seperti uploader, timestamp
+    fd.append('submittedAt', new Date().toISOString());
+
+    // NOTE: Ubah URL di bawah kepada endpoint server anda yang akan simpan data & fail.
+    // Contoh endpoint server: /api/inventory/create (anda perlu sediakan server-side)
+    const endpoint = '/api/inventory/create';
+
+    // Jika tiada endpoint (client-only), boleh convert ke JSON (tanpa file) dan print.
+    // Di sini cuba fetch; kalau 404/tiada endpoint, tunjukkan data preview.
+    fetch(endpoint, {
+      method: 'POST',
+      body: fd
+    })
+    .then(async res => {
+      if(!res.ok){
+        // Jika endpoint tidak wujud (401/404), tunjuk preview data sebagai fallback
+        const text = await res.text().catch(()=>null);
+        throw new Error(text || 'Gagal hantar ke server. Sila semak endpoint.');
+      }
+      return res.json();
+    })
+    .then(data => {
+      msg.innerHTML = '<span class="success">Rekod berjaya disimpan.</span>';
+      form.reset();
+      imgPreview.style.display='none';
+      noImage.style.display='block';
+      total.value='';
+    })
+    .catch(err => {
+      console.warn(err);
+      msg.innerHTML = '<span class="error">Gagal hantar: ' + (err.message || 'Ralat sambungan') + '</span>';
+      // Fallback: tunjuk dialog dengan ringkasan data (untuk debug)
+      // collect readable data (excluding file)
+      const summary = {};
+      new FormData(form).forEach((v,k)=>{ if(k !== 'photo') summary[k]=v; });
+      console.log('Summary data (fallback):', summary);
+      // If you prefer, you can prompt user to download filled PDF client-side (advanced)
+    })
+    .finally(()=>{ submitBtn.disabled=false; submitBtn.textContent='Hantar'; });
+  });
+
+});
+</script>
+</body>
+</html>
